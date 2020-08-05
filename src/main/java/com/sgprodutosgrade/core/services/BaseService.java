@@ -1,20 +1,22 @@
 package com.sgprodutosgrade.core.services;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
 import com.sgprodutosgrade.application.exceptions.RegraBaseException;
 import com.sgprodutosgrade.core.entities.produto.BaseEntity;
+import com.sgprodutosgrade.infra.repositorys.IBaseRepository;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 public abstract class BaseService<T extends BaseEntity> {
 
-    private final JpaRepository<T, UUID> _repository;
+    protected final IBaseRepository<T> _repository;
 
-    public BaseService(JpaRepository<T, UUID> repository) {
+    public BaseService(IBaseRepository<T> repository) {
         _repository = repository;
     }
     public Page<T> list(int page) {
@@ -29,9 +31,11 @@ public abstract class BaseService<T extends BaseEntity> {
         return optional.get();
     }
 
+    @Transactional
     public T save(T entity) {
 
         entity.setAtivo(true);
+        entity.setDataCadastro(LocalDateTime.now());
         entity.setId(UUID.randomUUID());
         
         this._repository.save(entity);
@@ -39,6 +43,7 @@ public abstract class BaseService<T extends BaseEntity> {
         return entity;
     }
 
+    @Transactional
     public T update(T entity) {
         Optional<T> optional = this._repository.findById(entity.getId());
         if (!optional.isPresent()) {

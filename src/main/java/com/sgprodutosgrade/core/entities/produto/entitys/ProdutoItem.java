@@ -2,11 +2,17 @@ package com.sgprodutosgrade.core.entities.produto.entitys;
 
 import java.math.BigDecimal;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.OneToOne;
 
+import com.sgprodutosgrade.core.entities.medida.ProdutoMedida;
 import com.sgprodutosgrade.core.entities.produto.base.AbstractProduto;
 import com.sgprodutosgrade.core.entities.produto.base.IProdutoItem;
+
+import org.hibernate.annotations.Cascade;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -29,9 +35,18 @@ public class ProdutoItem extends AbstractProduto implements IProdutoItem {
         return this;
     }
 
+    public ProdutoItem setMedidaBuild(ProdutoMedida medida) {
+        setMedida(medida);
+        return this;
+    }
+
     @Column(unique = true)
     private String codigoBarras;
 
     @Column(unique = true)
     private String detalhes;
+
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    // @Cascade( { org.hibernate.annotations.CascadeType.SAVE_UPDATE })
+    private ProdutoMedida medida;
 }

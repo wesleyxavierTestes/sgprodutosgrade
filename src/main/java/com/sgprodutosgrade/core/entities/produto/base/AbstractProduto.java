@@ -32,14 +32,4 @@ public abstract class AbstractProduto extends BaseEntity implements IProduto {
     @Column(nullable = false)
     @JsonFormat(shape=JsonFormat.Shape.STRING)
     protected BigDecimal valor;
-
-    // @JsonGetter("valor")
-    // public void getJsonValor(String valor) {
-    //     this.valor = new BigDecimal(valor);
-    // }
-
-    // @JsonSetter("valor")
-    // public String getJsonValor() {
-    //     return this.valor.toString();
-    // }
 }

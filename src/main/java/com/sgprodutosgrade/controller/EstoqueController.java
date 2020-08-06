@@ -7,6 +7,8 @@ import com.sgprodutosgrade.core.entities.estoque.AbstractEstoque;
 import com.sgprodutosgrade.core.entities.estoque.EstoqueEntrada;
 import com.sgprodutosgrade.core.entities.estoque.EstoqueSaida;
 import com.sgprodutosgrade.core.entities.estoque.IEstoque;
+import com.sgprodutosgrade.core.services.estoque.EstoqueEntradaService;
+import com.sgprodutosgrade.core.services.estoque.EstoqueSaidaService;
 import com.sgprodutosgrade.core.services.estoque.EstoqueService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,10 +28,18 @@ import org.springframework.web.bind.annotation.RestController;
 public class EstoqueController {
 
     private final EstoqueService _service;
+    private final EstoqueSaidaService _serviceSaida;
+    private final EstoqueEntradaService _serviceEntrada;
 
     @Autowired
-    public EstoqueController(EstoqueService service) {
+    public EstoqueController(
+        EstoqueService service,
+        EstoqueSaidaService serviceSaida,
+        EstoqueEntradaService serviceEntrada
+        ) {
         _service = service;
+        _serviceSaida = serviceSaida;
+        _serviceEntrada = serviceEntrada;
     }
 
     @ExceptionHandler(RegraBaseException.class)
@@ -48,7 +58,7 @@ public class EstoqueController {
     @GetMapping("list/entrada")
     public ResponseEntity<Page<EstoqueEntrada>> listEntrada(@RequestParam(name = "page") int page) {
 
-        Page<EstoqueEntrada> list = this._service.listEntrada(page);
+        Page<EstoqueEntrada> list = this._serviceEntrada.list(page);
 
         return ResponseEntity.ok(list);
     }
@@ -56,7 +66,7 @@ public class EstoqueController {
     @GetMapping("list/saida")
     public ResponseEntity<Page<EstoqueSaida>> listSaida(@RequestParam(name = "page") int page) {
 
-        Page<EstoqueSaida> list = this._service.listSaida(page);
+        Page<EstoqueSaida> list = this._serviceSaida.list(page);
 
         return ResponseEntity.ok(list);
     }
@@ -74,7 +84,7 @@ public class EstoqueController {
 
         IEstoque estoque = null;
         for (int y = 0; y < 2; y++) {
-            for (int i = 0; i < 10; i++) {
+            for (int i = 0; i < 50; i++) {
                 if (y == 0) {
                     estoque = new EstoqueSaida();
                 } else {

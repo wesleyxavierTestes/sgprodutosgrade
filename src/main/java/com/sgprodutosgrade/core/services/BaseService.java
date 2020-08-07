@@ -12,11 +12,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.transaction.annotation.Transactional;
 
-public abstract class BaseService<T extends BaseEntity> {
+public abstract class BaseService<T extends BaseEntity, Y extends IBaseRepository<T>> {
 
-    protected final IBaseRepository<T> _repository;
+    protected final Y _repository;
 
-    public BaseService(IBaseRepository<T> repository) {
+    public BaseService(Y repository) {
         _repository = repository;
     }
     public Page<T> list(int page) {

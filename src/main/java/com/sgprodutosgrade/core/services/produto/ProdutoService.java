@@ -14,7 +14,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ProdutoService extends BaseService<Produto> {
+public class ProdutoService extends BaseService<Produto, IProdutoRepository> {
 
     @Autowired
     private IProdutoItemRepository _repository;
